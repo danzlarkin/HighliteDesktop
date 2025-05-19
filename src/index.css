@@ -1,0 +1,31 @@
+body {
+    margin: 0;
+}
+
+.highlite_titlebar {
+    height: 25px;
+    background: rgb(41, 41, 41);
+    width: 100%;
+    font-size: 14px;
+    color: white;
+    display: flex;
+    align-items: center;
+    font-family: sans-serif;
+    font-weight: bold;
+
+    /* Electron allow user to drag the window */
+    -webkit-app-region: drag;
+}
+
+.highlite_titlebar #logoText {
+    margin-left: 5px;
+}
+
+.highlite_titlebar #logoImg {
+    height: 18px;
+}
+
+.highlite_titlebar a {
+    /* Allow clicking on the links */
+    -webkit-app-region: no-drag;
+}

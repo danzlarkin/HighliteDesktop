@@ -1,9 +1,15 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 
+
+// See: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
+if (require('electron-squirrel-startup')) app.quit();
+
+
 async function createWindow () {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
+        titleBarStyle: 'hidden',
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
@@ -12,8 +18,12 @@ async function createWindow () {
         },
         minHeight: 500,
         minWidth: 500,
-        titleBarStyle: 'hidden',
-        ...(process.platform !== 'darwin' ? { titleBarOverlay: true } : {})
+        icon: path.join(__dirname, 'static/icons/icon.png'),
+        ...(process.platform !== 'darwin' ? { titleBarOverlay: {
+            color: '#141414',
+            symbolColor: '#eee',
+            height: 25
+        },} : {}),
     });
 
     mainWindow.setMenu(null);
@@ -21,6 +31,7 @@ async function createWindow () {
 
     // Load serialized DOM into the window.
     mainWindow.loadFile(path.join(__dirname, 'index.html'));
+    mainWindow.webContents.openDevTools();
 
     // Allows the opening of external links in the default browser.
     // Otherwise, it will open in the app.

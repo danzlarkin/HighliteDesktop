@@ -38,6 +38,8 @@ async function generatePage() {
                     child.setAttribute("href", "https://highspell.com" + href);
                 }
             }
+
+            // Append the child
             document.body.appendChild(child.cloneNode(true));
         }
     });
@@ -53,7 +55,50 @@ async function generatePage() {
             // if script was in body, append to body
             document.body.appendChild(newScript);
         }
+    });
 
+
+    // If you need to move any of Highlite's elements to a more appropriate location, do it here
+    /* Find DOM elements with the attribute to= */
+    const toElements = document.querySelectorAll("[to]");
+    toElements.forEach(element => {
+        console.warn(element);
+        const to = element.getAttribute("to");
+        const targetElement = document.querySelector(to);
+
+        // Check if the element has a before or after attribute
+        const before = element.getAttribute("before");
+        const after = element.getAttribute("after");
+
+        // If before is set, insert the element before the target element
+        if (before && !after) {
+            const beforeElement = document.querySelector(before);
+            if (beforeElement) {
+                element.remove();
+                beforeElement.parentNode.insertBefore(element, beforeElement);
+            }
+        } else if (after && !before) {
+            // If after is set, insert the element after the target element
+            const afterElement = document.querySelector(after);
+            if (afterElement) {
+                element.remove();
+                afterElement.parentNode.insertBefore(element, afterElement.nextSibling);
+            }
+        } else if (!after && !before) {
+            // If neither before nor after is set, append the element to the target element
+            // This is the default behavior
+            if (targetElement) {
+                element.remove();
+                targetElement.appendChild(element);
+            }
+        } else if (after && before) {
+            // If both before and after are set, log a warning
+            console.warn("Element has both before and after attributes. Peforming default behavior.");
+            if (targetElement) {
+                element.remove();
+                targetElement.appendChild(element);
+            }
+        }
     });
 }
 

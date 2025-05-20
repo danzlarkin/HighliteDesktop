@@ -4,24 +4,28 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 module.exports = {
   packagerConfig: {
     asar: true,
+    icon: "./src/static/icons/icon"
   },
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
     },
     {
       name: '@electron-forge/maker-zip',
-    }
-    // {
-    //   name: '@electron-forge/maker-deb',
-    //   config: {},
-    // },
-    // {
-    //   name: '@electron-forge/maker-rpm',
-    //   config: {},
-    // },
+    },
+    {
+      name: '@electron-forge/maker-deb',
+      config: {
+        options: {
+          icon: './src/static/icons/icon.png',
+          category: 'Game',
+          maintainer: 'Highlite Team',
+          homepage: 'https://highlite.fanet.dev',
+          description: 'Highlite Game Client',
+        }
+      },
+    },
   ],
   plugins: [
     {

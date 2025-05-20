@@ -1,8 +1,8 @@
 <!DOCTYPE html><html lang="en">
     <head>
-        <link href="./index.css" rel="stylesheet">
-        <script type="module" src="./loader/generatePage.js"></script>
-        <script type="module" src="./loader/inject.js"></script>
+        <link href="./static/css/index.css" rel="stylesheet">
+        <link href="./static/css/overrides.css" rel="stylesheet">
+        <script type="module" src="./generatePage.js"></script>
         <script src="https://kit.fontawesome.com/c57f34e341.js" crossorigin="anonymous"></script>
     </head>
     <body>
@@ -23,32 +23,12 @@
                 <span></span>
             </div>
             
-            <div class="content">
-            </div>
+            <div class="content"></div>
         </div>
         <div to="main" class="highlite_bar">
-            <div onclick="toggleContent()" class="highlite_bar_item" id="item_settings">🔧</div>
         </div>
         <video width="100%" height="100%" autoplay muted loop class="video-background">
             <source src="./static/media/login_screen.mp4" type="video/mp4">
         </video>
     </body>
 </html>
-
-<script>
-    function toggleContent() {
-        const contentBox = document.getElementsByClassName("highlite_bar_selected_content")[0];
-        
-        // If contentBox has the class .activated, remove it
-        if (contentBox.classList.contains("activated")) {
-            contentBox.classList.remove("activated");
-            const resizeEvent = new Event('resize');
-            window.dispatchEvent(resizeEvent);
-        } else {
-            // Otherwise, add the class .activated
-            contentBox.classList.add("activated");
-            const resizeEvent = new Event('resize');
-            window.dispatchEvent(resizeEvent);
-       }
-    }
-</script>

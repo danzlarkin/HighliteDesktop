@@ -1,11 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 
-
-// See: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
-if (require('electron-squirrel-startup')) app.quit();
-
-
 async function createWindow () {
     // Create the browser window.
     const mainWindow = new BrowserWindow({

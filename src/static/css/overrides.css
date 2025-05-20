@@ -1,0 +1,36 @@
+/* Modifications to CSS set by the game client's CSS file */
+
+#main {
+    align-items: unset !important;
+    justify-content: unset !important;
+    flex-direction: row !important;
+    border-top: 1px solid black !important;
+}
+body {
+    align-items: unset !important;
+    display: unset !important;
+    flex-direction: unset !important;
+    justify-content: unset !important;
+    background: black;
+}
+
+#body-container {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+#game-container {
+    width: -webkit-fill-available !important;
+    min-width: unset !important;
+    border-right: 1px solid black !important;
+}
+
+#game-container .full-size {
+    width: -webkit-fill-available !important;
+    min-width: unset !important;
+}
+
+#game-container__game-canvas {
+    width: -webkit-fill-available !important;
+    min-width: unset !important;
+}

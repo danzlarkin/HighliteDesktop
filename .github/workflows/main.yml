@@ -1,0 +1,29 @@
+name: Build/release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v1
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Electron Forge Action
+        uses: yinxulai/actions-electron-forge@0.05
+        with:
+          github_token: ${{ secrets.github_token }}
+          package_root: .
+          script_name: publish
+          release: true

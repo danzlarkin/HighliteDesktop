@@ -27,6 +27,20 @@ module.exports = {
       },
     },
   ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'Highlite',
+          name: 'HighliteDesktop',
+        },
+        prerelease: true,
+        draft: true,
+        releaseNotes: 'Release Notes',
+      },
+    }
+  ],
   plugins: [
     {
       name: '@electron-forge/plugin-auto-unpack-natives',

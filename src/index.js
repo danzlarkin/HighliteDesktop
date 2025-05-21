@@ -1,8 +1,9 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, shell } = require('electron');
 const path = require('path');
 
-async function createWindow () {
-    // Create the browser window.
+let windows = new Set();
+
+function createWindow() {
     const mainWindow = new BrowserWindow({
         titleBarStyle: 'hidden',
         webPreferences: {
@@ -14,35 +15,56 @@ async function createWindow () {
         minHeight: 500,
         minWidth: 500,
         icon: path.join(__dirname, 'static/icons/icon.png'),
-        ...(process.platform !== 'darwin' ? { titleBarOverlay: {
-            color: '#141414',
-            symbolColor: '#eee',
-            height: 25
-        },} : {}),
+        ...(process.platform !== 'darwin' ? {
+            titleBarOverlay: {
+                color: '#141414',
+                symbolColor: '#eee',
+                height: 25
+            },
+        } : {}),
     });
 
     mainWindow.setMenu(null);
-
-
-    // Load serialized DOM into the window.
     mainWindow.loadFile(path.join(__dirname, 'index.html'));
     mainWindow.webContents.openDevTools();
 
-    // Allows the opening of external links in the default browser.
-    // Otherwise, it will open in the app.
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    require('electron').shell.openExternal(url);
+        shell.openExternal(url);
         return { action: 'deny' };
     });
+
+    mainWindow.on('closed', () => {
+        windows.delete(mainWindow);
+    });
+
+    windows.add(mainWindow);
 }
 
-app.whenReady().then(async () => {
-    await createWindow();
+const gotTheLock = app.requestSingleInstanceLock();
 
-    app.on('activate', function () {
-        // On macOS it's common to re-create a window in the app when the
-        // dock icon is clicked and there are no other windows open.
-        if (BrowserWindow.getAllWindows().length === 0) createWindow();
+if (!gotTheLock) {
+    app.quit();
+} else {
+    app.whenReady().then(() => {
+        createWindow();
+
+        app.on('activate', () => {
+            // On macOS it's common to re-create a window in the app when the
+            // dock icon is clicked and there are no other windows open.
+            if (windows.size === 0) {
+                createWindow();
+            }
+        });
+    });
+
+    app.on('second-instance', (event, argv, workingDirectory) => {
+        // Someone tried to run a second instance, open a new window in response.
+        createWindow();
+    });
+
+    app.on('window-all-closed', () => {
+        if (process.platform !== 'darwin') {
+            app.quit();
+        }
     });
 }
-);

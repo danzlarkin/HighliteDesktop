@@ -177,6 +177,12 @@ async function generatePage() {
     highliteCoreScript.id = "highliteCoreScript"
     highliteCoreScript.textContent = await obtainHighliteCore();
     document.body.append(highliteCoreScript);
+
+    // Fire a new DOMContentLoaded event
+    document.dispatchEvent(new Event("DOMContentLoaded", {
+        bubbles: true,
+        cancelable: true
+    }));
 }
 
 

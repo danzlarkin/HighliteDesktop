@@ -75,10 +75,6 @@ body {
     cursor: pointer;
     height: 25px;
     width: 25px;
-}
-
-/* Disallow dragging or selecting the text */
-.highlite_bar .highlite_bar_item {
     -webkit-app-region: no-drag;
     user-select: none;
 }
@@ -100,7 +96,6 @@ body {
 
 .highlite_bar_selected_content .content {
     display: flex;
-    padding: 5px;
     font-family: 'Inter';
     font-size: 14px;
     border-top: 1px solid black;

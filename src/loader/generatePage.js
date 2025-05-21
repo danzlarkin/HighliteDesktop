@@ -1,4 +1,4 @@
-import { IndexDBWrapper } from "./helpers/IndexDBWrapper.js";
+import { IndexDBWrapper } from "../helpers/IndexDBWrapper.js";
 
 async function obtainGameClient() {
     const highspellAssetsURL = "https://highspell.com:3002/assetsClient";
@@ -177,12 +177,6 @@ async function generatePage() {
     highliteCoreScript.id = "highliteCoreScript"
     highliteCoreScript.textContent = await obtainHighliteCore();
     document.body.append(highliteCoreScript);
-
-    // Fire DOM Loaded Event
-    // document.dispatchEvent(new Event("DOMContentLoaded", {
-    //     bubbles: true,
-    //     cancelable: true
-    // }))
 }
 
 

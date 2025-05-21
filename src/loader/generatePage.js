@@ -1,5 +1,5 @@
 import { IndexDBWrapper } from "../helpers/IndexDBWrapper.js";
-
+const { ipcRenderer } = require("electron");
 async function obtainGameClient() {
     const highspellAssetsURL = "https://highspell.com:3002/assetsClient";
     const highliteDB = new IndexDBWrapper();
@@ -177,6 +177,8 @@ async function generatePage() {
     highliteCoreScript.id = "highliteCoreScript"
     highliteCoreScript.textContent = await obtainHighliteCore();
     document.body.append(highliteCoreScript);
+
+    ipcRenderer.send("ui-ready")
 
     // Fire a new DOMContentLoaded event
     document.dispatchEvent(new Event("DOMContentLoaded", {

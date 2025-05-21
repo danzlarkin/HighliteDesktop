@@ -1,4 +1,5 @@
 const { app, BrowserWindow, shell } = require('electron');
+const { ipcMain } = require('electron');
 const path = require('path');
 
 let windows = new Set();
@@ -22,24 +23,33 @@ function createWindow() {
                 height: 25
             },
         } : {}),
+        show: false,
     });
 
     mainWindow.setMenu(null);
     mainWindow.loadFile(path.join(__dirname, 'index.html'));
-    mainWindow.webContents.openDevTools();
 
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
         shell.openExternal(url);
         return { action: 'deny' };
     });
-
+        mainWindow.webContents.openDevTools();
+        
     mainWindow.on('closed', () => {
         windows.delete(mainWindow);
+    });
+
+    // Listen for "ui-ready" signal from renderer
+    ipcMain.once('ui-ready', () => {
+        mainWindow.show();
     });
 
     windows.add(mainWindow);
 }
 
+app.commandLine.appendSwitch('disable-background-timer-throttling');
+app.commandLine.appendSwitch('disable-renderer-backgrounding');
+app.commandLine.appendSwitch('disable-backgrounding-occluded-windows');
 const gotTheLock = app.requestSingleInstanceLock();
 
 if (!gotTheLock) {

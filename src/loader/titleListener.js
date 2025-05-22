@@ -1,10 +1,6 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('electronApi', {
-    onSetTitle: (callback) => ipcRenderer.on('set-title', (event, data) => callback(data)),
-});
-
-window.electronApi.onSetTitle((data) => {
+ipcRenderer.on('set-title', (data) => {
     console.log('Received from main:', data);
     window.logoText.innerText = data.title;
 });

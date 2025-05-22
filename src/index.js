@@ -48,7 +48,14 @@ function createWindow() {
 
     windows.add(mainWindow);
 
-    autoUpdater.checkForUpdatesAndNotify();
+    // Check for updates and prompt user to install if available
+    autoUpdater.checkForUpdatesAndNotify(
+        {
+            title: 'Update Available',
+            body: 'A new version of Highspell is available. Would you like to update now?',
+            buttons: ['Yes', 'No'],
+        }
+    )
 }
 
 app.commandLine.appendSwitch('disable-background-timer-throttling');

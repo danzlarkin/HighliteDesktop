@@ -42,9 +42,8 @@ async function createWindow() {
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
-            contextIsolation: true,
-            enablePreferredSizeMode: true,
-            preload: __dirname + '/preload.js', // important for secure IPC
+            contextIsolation: false,
+            enablePreferredSizeMode: true
         },
         minHeight: 500,
         minWidth: 500,

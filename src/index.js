@@ -1,12 +1,14 @@
 const { app, BrowserWindow, shell } = require('electron');
-const { ipcMain } = require('electron');
+const { ipcMain, dialog } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 const path = require('path');
 
+autoUpdater.autoDownload = false;
+
 let windows = new Set();
 
-function createWindow() {
+async function createWindow() {
     const mainWindow = new BrowserWindow({
         titleBarStyle: 'hidden',
         webPreferences: {
@@ -47,15 +49,6 @@ function createWindow() {
     });
 
     windows.add(mainWindow);
-
-    // Check for updates and prompt user to install if available
-    autoUpdater.checkForUpdatesAndNotify(
-        {
-            title: 'Update Available',
-            body: 'A new version of Highspell is available. Would you like to update now?',
-            buttons: ['Yes', 'No'],
-        }
-    )
 }
 
 app.commandLine.appendSwitch('disable-background-timer-throttling');
@@ -69,19 +62,41 @@ const gotTheLock = app.requestSingleInstanceLock();
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 
-autoUpdater.on('update-available', () => {
-  log.info('Update available');
-});
 
-autoUpdater.on('update-downloaded', () => {
-  log.info('Update downloaded, will install on quit');
-  autoUpdater.quitAndInstall();
-});
 
 
 if (!gotTheLock) {
     app.quit();
 } else {
+    autoUpdater.checkForUpdates();
+
+    autoUpdater.on('update-available', () => {
+        const updateAvailable = dialog.showMessageBox({
+            type: 'info',
+            title: 'Update Available',
+            message: 'A new version is available. Do you want to update now?',
+            buttons: ['Yes', 'No']
+        });
+
+        if (updateAvailable.response === 0) {
+            autoUpdater.downloadUpdate();
+        }
+    });
+
+    autoUpdater.on('update-downloaded', () => {
+        log.info('Update downloaded, will install on quit');
+        const installUpdate = dialog.showMessageBox({
+            type: 'info',
+            title: 'Update Ready',
+            message: 'The update has been downloaded. Restart the app to apply the update.',
+            buttons: ['Restart', 'Later']
+        });
+
+        if (installUpdate.response === 0) {
+            autoUpdater.quitAndInstall();
+        }
+    });
+
     app.whenReady().then(() => {
         createWindow();
 

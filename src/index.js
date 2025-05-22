@@ -88,8 +88,8 @@ if (!gotTheLock) {
 } else {
     autoUpdater.checkForUpdates();
 
-    autoUpdater.on('update-available', () => {
-        const updateAvailable = dialog.showMessageBox({
+    autoUpdater.on('update-available', async () => {
+        const updateAvailable = await dialog.showMessageBox({
             type: 'info',
             title: 'Update Available',
             message: 'A new version is available. Do you want to update now?',
@@ -101,9 +101,9 @@ if (!gotTheLock) {
         }
     });
 
-    autoUpdater.on('update-downloaded', () => {
+    autoUpdater.on('update-downloaded', async () => {
         log.info('Update downloaded, will install on quit');
-        const installUpdate = dialog.showMessageBox({
+        const installUpdate = await dialog.showMessageBox({
             type: 'info',
             title: 'Update Ready',
             message: 'The update has been downloaded. Restart the app to apply the update.',

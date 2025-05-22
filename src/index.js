@@ -20,14 +20,31 @@ log.info('App version:', app.getVersion());
 
 let windows = new Set();
 
+function initializeTitle(mainWindow) {
+    const args = process.argv;
+    const profileArg = args.find(arg => arg.startsWith('--profile='));
+
+    let title = `HighLite`;
+
+    if (profileArg) {
+        let profileName = profileArg.split('=')[1];
+        title = `${profileName} - HighLite`;
+    }
+
+    mainWindow.webContents.on('did-finish-load', () => {
+        mainWindow.webContents.send('set-title', {title});
+    });
+}
+
 async function createWindow() {
     const mainWindow = new BrowserWindow({
         titleBarStyle: 'hidden',
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
-            contextIsolation: false,
+            contextIsolation: true,
             enablePreferredSizeMode: true,
+            preload: __dirname + '/preload.js', // important for secure IPC
         },
         minHeight: 500,
         minWidth: 500,
@@ -43,12 +60,18 @@ async function createWindow() {
     });
 
     mainWindow.setMenu(null);
-    mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
+    initializeTitle(mainWindow);
+    mainWindow.loadFile(path.join(__dirname, 'index.html'));
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
         shell.openExternal(url);
         return { action: 'deny' };
     });
+    
+
+    if (!app.isPackaged) {
+        mainWindow.webContents.openDevTools();
+    }
         
     mainWindow.on('closed', () => {
         windows.delete(mainWindow);

@@ -16,7 +16,9 @@
   "main": "src/index.js",
   "scripts": {
     "app:dir": "electron-builder --dir",
-    "app:dist": "electron-builder"
+    "app:dist": "electron-builder",
+    "start": "electron .",
+    "start-profile-test": "electron . --profile=Test"
   },
   "build": {
     "appId": "com.highlite.desktop",

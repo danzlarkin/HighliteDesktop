@@ -61,8 +61,11 @@ function createWindow() {
 app.commandLine.appendSwitch('disable-background-timer-throttling');
 app.commandLine.appendSwitch('disable-renderer-backgrounding');
 app.commandLine.appendSwitch('disable-backgrounding-occluded-windows');
-const gotTheLock = app.requestSingleInstanceLock();
 
+// Log the app version
+log.info('App version:', app.getVersion());
+
+const gotTheLock = app.requestSingleInstanceLock();
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 

@@ -31,9 +31,7 @@ function initializeTitle(mainWindow) {
         title = `${profileName} - HighLite`;
     }
 
-    mainWindow.webContents.on('did-finish-load', () => {
-        mainWindow.webContents.send('set-title', {title});
-    });
+    mainWindow.webContents.send('set-title', { title });
 }
 
 async function createWindow() {
@@ -60,8 +58,6 @@ async function createWindow() {
 
     mainWindow.setMenu(null);
 
-    initializeTitle(mainWindow);
-
     mainWindow.loadFile(path.join(__dirname, 'index.html'));
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
         shell.openExternal(url);
@@ -78,6 +74,8 @@ async function createWindow() {
 
     // Listen for "ui-ready" signal from renderer
     ipcMain.once('ui-ready', () => {
+        initializeTitle(mainWindow);
+
         mainWindow.show();
     });
 

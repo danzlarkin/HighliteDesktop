@@ -4,7 +4,19 @@ const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 const path = require('path');
 
+log.initialize();
+
 autoUpdater.autoDownload = false;
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+autoUpdater.logger.transports.console.level = 'info';
+
+app.commandLine.appendSwitch('disable-background-timer-throttling');
+app.commandLine.appendSwitch('disable-renderer-backgrounding');
+app.commandLine.appendSwitch('disable-backgrounding-occluded-windows');
+
+// Log the app version
+log.info('App version:', app.getVersion());
 
 let windows = new Set();
 
@@ -37,7 +49,6 @@ async function createWindow() {
         shell.openExternal(url);
         return { action: 'deny' };
     });
-        mainWindow.webContents.openDevTools();
         
     mainWindow.on('closed', () => {
         windows.delete(mainWindow);
@@ -51,20 +62,7 @@ async function createWindow() {
     windows.add(mainWindow);
 }
 
-app.commandLine.appendSwitch('disable-background-timer-throttling');
-app.commandLine.appendSwitch('disable-renderer-backgrounding');
-app.commandLine.appendSwitch('disable-backgrounding-occluded-windows');
-
-// Log the app version
-log.info('App version:', app.getVersion());
-
 const gotTheLock = app.requestSingleInstanceLock();
-autoUpdater.logger = log;
-autoUpdater.logger.transports.file.level = 'info';
-
-
-
-
 if (!gotTheLock) {
     app.quit();
 } else {

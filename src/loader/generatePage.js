@@ -1,5 +1,6 @@
 import { IndexDBWrapper } from "../helpers/IndexDBWrapper.js";
 const { ipcRenderer } = require("electron");
+
 async function obtainGameClient() {
     const highspellAssetsURL = "https://highspell.com:3002/assetsClient";
     const highliteDB = new IndexDBWrapper();

@@ -16,7 +16,7 @@ HighLite is split into two repositories [HighliteDesktop](https://github.com/Hig
 # Development
 ## Software Requirements
 - NodeJS v22 LTS (https://nodejs.org/en/download)
-- Yarn (npm install --global yarn)
+- Yarn (npm install --global corepack)
 
 ## Building
 ### Non-Package Build

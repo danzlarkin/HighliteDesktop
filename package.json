@@ -1,7 +1,7 @@
 {
   "name": "HighliteDesktop",
   "productName": "HighLite",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A RuneLite-esque Client for the game High Spell",
   "homepage": "https://github.com/Highl1te/HighliteDesktop#readme",
   "bugs": {
@@ -16,7 +16,9 @@
   "main": "src/index.js",
   "scripts": {
     "app:dir": "electron-builder --dir",
-    "app:dist": "electron-builder"
+    "app:dist": "electron-builder",
+    "start": "electron .",
+    "start-profile-test": "electron . --profile=Test"
   },
   "build": {
     "appId": "com.highlite.desktop",

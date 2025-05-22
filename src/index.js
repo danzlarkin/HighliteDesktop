@@ -62,12 +62,12 @@ async function createWindow() {
     mainWindow.setMenu(null);
 
     initializeTitle(mainWindow);
+
     mainWindow.loadFile(path.join(__dirname, 'index.html'));
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
         shell.openExternal(url);
         return { action: 'deny' };
     });
-    
 
     if (!app.isPackaged) {
         mainWindow.webContents.openDevTools();

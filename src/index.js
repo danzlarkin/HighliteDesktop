@@ -1,5 +1,5 @@
 const { app, BrowserWindow, shell } = require('electron');
-const { ipcMain, dialog } = require('electron');
+const { ipcMain } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 const path = require('path');
@@ -75,66 +75,99 @@ async function createWindow() {
     // Listen for "ui-ready" signal from renderer
     ipcMain.once('ui-ready', () => {
         initializeTitle(mainWindow);
+    });
 
-        mainWindow.show();
+    mainWindow.show();
+
+    autoUpdater.on('download-progress', (progressObj) => {
+        mainWindow.webContents.send('download-progress', progressObj.percent);
     });
 
     windows.add(mainWindow);
 }
 
-const gotTheLock = app.requestSingleInstanceLock();
-if (!gotTheLock) {
-    app.quit();
-} else {
-    autoUpdater.checkForUpdates();
+async function createUpdateWindow() {
+    const updateWindow = new BrowserWindow({
+        title: 'Updating HighLite...',
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+        },
+        frame: true,
+        resizable: false,
+        icon: path.join(__dirname, 'static/icons/icon.png'),
+        titleBarStyle: 'hidden',
+        width: 600,
+        height: 400,
+    });
 
-    autoUpdater.on('update-available', async () => {
-        const updateAvailable = await dialog.showMessageBox({
-            type: 'info',
-            title: 'Update Available',
-            message: 'A new version is available. Do you want to update now?',
-            buttons: ['Yes', 'No']
-        });
+    updateWindow.loadFile(path.join(__dirname, 'update.html'));
+    // Open dev tools if not packaged
+    updateWindow.webContents.openDevTools();
 
-        if (updateAvailable.response === 0) {
-            autoUpdater.downloadUpdate();
-        }
+    windows.add(updateWindow);
+
+    updateWindow.on('ready-to-show', () => {
+        autoUpdater.checkForUpdates();
+    });
+    
+    autoUpdater.on('download-progress', (progressObj) => {
+        updateWindow.webContents.send('download-progress', progressObj.percent);
     });
 
     autoUpdater.on('update-downloaded', async () => {
-        log.info('Update downloaded, will install on quit');
-        const installUpdate = await dialog.showMessageBox({
-            type: 'info',
-            title: 'Update Ready',
-            message: 'The update has been downloaded. Restart the app to apply the update.',
-            buttons: ['Restart', 'Later']
-        });
-
-        if (installUpdate.response === 0) {
-            autoUpdater.quitAndInstall();
-        }
+        updateWindow.webContents.send('update-downloaded');
     });
 
-    app.whenReady().then(() => {
+    autoUpdater.on('update-available', async (updateInfo) => {
+        log.info('Update available:', updateInfo.releaseName);
+        updateWindow.webContents.send('update-available', updateInfo);
+    });
+
+    ipcMain.once('install-update', async () => {
+        autoUpdater.quitAndInstall();
+    });
+
+    ipcMain.once('download-update', async () => {
+        autoUpdater.downloadUpdate();
+    });
+
+    ipcMain.once('delay-update', async () => {
+        updateWindow.close();
+        windows.delete(updateWindow);
         createWindow();
-
-        app.on('activate', () => {
-            // On macOS it's common to re-create a window in the app when the
-            // dock icon is clicked and there are no other windows open.
-            if (windows.size === 0) {
-                createWindow();
-            }
-        });
-    });
-
-    app.on('second-instance', (event, argv, workingDirectory) => {
-        // Someone tried to run a second instance, open a new window in response.
-        createWindow();
-    });
-
-    app.on('window-all-closed', () => {
-        if (process.platform !== 'darwin') {
-            app.quit();
-        }
     });
 }
+
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+    app.quit();
+}
+
+app.whenReady().then(() => {
+    if (!app.isPackaged) {
+        createWindow();
+    } else {
+        createUpdateWindow();
+    }
+
+    app.on('activate', () => {
+        // On macOS it's common to re-create a window in the app when the
+        // dock icon is clicked and there are no other windows open.
+        if (windows.size === 0) {
+            createWindow();
+        }
+    });
+});
+
+app.on('second-instance', (event, argv, workingDirectory) => {
+    // Someone tried to run a second instance, open a new window in response.
+    createWindow();
+});
+
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+});
+

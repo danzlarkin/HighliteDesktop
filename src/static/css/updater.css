@@ -1,0 +1,125 @@
+body {
+    margin: 0;
+    overflow-x: hidden;
+    background:#1a1a1a;
+    color:white;
+    font-family: 'Inter', sans-serif;
+}
+
+.highlite_titlebar {
+    height: 25px;
+    background: #141414;
+    width: 100%;
+    font-size: 14px;
+    color: white;
+    display: flex;
+    align-items: center;
+    font-family: 'Inter';
+    align-items: center;
+    border-bottom: 1px solid #353535;
+    /* Electron allow user to drag the window */
+    -webkit-app-region: drag;
+}
+
+.highlite_titlebar #logoText {
+    margin-left: 5px;
+}
+
+.highlite_titlebar #logoImg {
+    height: 25px;
+}
+
+.highlite_titlebar a {
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
+}
+
+.highlite_titlebar a {
+    /* Allow clicking on the links */
+    -webkit-app-region: no-drag;
+}
+
+#update-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+}
+
+#update-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#update-change a {
+    color: white;
+    text-decoration: underline;
+}
+#progressText {
+    display: none;
+}
+#progressLoader {
+    visibility: visible;
+}
+.loader {
+  width: 48px;
+  height: 48px;
+  position: relative;
+}
+.loader::after,
+.loader::before {
+  content: '';  
+  box-sizing: border-box;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #FFF;
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: animloader 2s linear infinite;
+}
+.loader::after {
+  animation-delay: 1s;
+}
+
+@keyframes animloader {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+    
+
+/*
+Button CSS
+*/
+button {
+    background-color: #1a1a1a;
+    color: white;
+    border: 1px solid #353535;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition-duration: 0.4s;
+}
+
+button:hover {
+    background-color: #353535;
+    color: white;
+    border: 1px solid #1a1a1a;
+}

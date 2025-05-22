@@ -1,5 +1,7 @@
 const { app, BrowserWindow, shell } = require('electron');
 const { ipcMain } = require('electron');
+const { autoUpdater } = require('electron-updater');
+const log = require('electron-log');
 const path = require('path');
 
 let windows = new Set();
@@ -45,12 +47,27 @@ function createWindow() {
     });
 
     windows.add(mainWindow);
+
+    autoUpdater.checkForUpdatesAndNotify();
 }
 
 app.commandLine.appendSwitch('disable-background-timer-throttling');
 app.commandLine.appendSwitch('disable-renderer-backgrounding');
 app.commandLine.appendSwitch('disable-backgrounding-occluded-windows');
 const gotTheLock = app.requestSingleInstanceLock();
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+
+autoUpdater.on('update-available', () => {
+  log.info('Update available');
+});
+
+autoUpdater.on('update-downloaded', () => {
+  log.info('Update downloaded, will install on quit');
+  autoUpdater.quitAndInstall();
+});
+
 
 if (!gotTheLock) {
     app.quit();

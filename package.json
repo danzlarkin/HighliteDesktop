@@ -20,7 +20,14 @@
   "build": {
     "appId": "com.highlite.desktop",
     "productName": "HighLite",
-    "mac" : {
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Highl1te",
+        "repo": "HighliteDesktop"
+      }
+    ],
+    "mac": {
       "category": "public.app-category.games",
       "target": [
         {
@@ -59,6 +66,8 @@
     "electron-builder": "^26.0.12"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.1"
+    "electron-log": "^5.4.0",
+    "electron-squirrel-startup": "^1.0.1",
+    "electron-updater": "^6.6.2"
   }
 }

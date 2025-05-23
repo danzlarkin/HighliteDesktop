@@ -4,7 +4,7 @@ const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 const path = require('path');
 
-log.initialize();
+log.initialize({ spyRendererConsole: true });
 
 autoUpdater.autoDownload = false;
 autoUpdater.logger = log;
@@ -64,9 +64,14 @@ async function createWindow() {
         return { action: 'deny' };
     });
 
-    if (!app.isPackaged) {
-        mainWindow.webContents.openDevTools();
-    }
+    // Allow pressing F12 to open dev tools
+    mainWindow.webContents.on('before-input-event', (event, input) => {
+        if (input.key === 'F12' && input.type === 'keyDown') {
+            event.preventDefault();
+            mainWindow.webContents.toggleDevTools();
+        }
+    });
+
         
     mainWindow.on('closed', () => {
         windows.delete(mainWindow);
@@ -75,9 +80,9 @@ async function createWindow() {
     // Listen for "ui-ready" signal from renderer
     ipcMain.once('ui-ready', () => {
         initializeTitle(mainWindow);
+        mainWindow.show();
+        return Promise.resolve();
     });
-
-    mainWindow.show();
 
     autoUpdater.on('download-progress', (progressObj) => {
         mainWindow.webContents.send('download-progress', progressObj.percent);
@@ -109,8 +114,20 @@ async function createUpdateWindow() {
 
     windows.add(updateWindow);
 
-    updateWindow.on('ready-to-show', () => {
-        autoUpdater.checkForUpdates();
+    updateWindow.on('ready-to-show', async () => {
+        if (!app.isPackaged) {
+          // Fire delay-update event to delay the update
+          // This is a workaround to prevent the update window from closing immediately
+          // when the app is not packaged
+
+          await createWindow();
+          updateWindow.close();
+          windows.delete(updateWindow);
+
+        } else {
+           autoUpdater.checkForUpdates();
+        }
+        
     });
     
     autoUpdater.on('download-progress', (progressObj) => {
@@ -135,9 +152,9 @@ async function createUpdateWindow() {
     });
 
     ipcMain.once('delay-update', async () => {
+        await createWindow();
         updateWindow.close();
         windows.delete(updateWindow);
-        createWindow();
     });
 }
 
@@ -147,11 +164,7 @@ if (!gotTheLock) {
 }
 
 app.whenReady().then(() => {
-    if (!app.isPackaged) {
-        createWindow();
-    } else {
-        createUpdateWindow();
-    }
+    createUpdateWindow();
 
     app.on('activate', () => {
         // On macOS it's common to re-create a window in the app when the

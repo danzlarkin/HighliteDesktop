@@ -18,7 +18,7 @@ HighLite is packaged as an Electron application and provides [Linux](#Linux), [M
 > 
 > ![image](https://github.com/user-attachments/assets/8dd15f93-29c4-42a8-966b-1bd8a83fa66c)
 > 
-> You can typically resolve this by click '...' and selecting 'Keep'
+> You can typically resolve this by clicking '...' and selecting 'Keep'
 
 
 > [!WARNING]
@@ -27,7 +27,7 @@ HighLite is packaged as an Electron application and provides [Linux](#Linux), [M
 > 
 > ![image](https://github.com/user-attachments/assets/90651443-a7ed-42b1-8e60-60af2a54fbf1)
 >
-> You can resolve this by click 'More Info' and pressing 'Run anyway'
+> You can resolve this by clicking 'More Info' and pressing 'Run anyway'
 > 
 > ![image](https://github.com/user-attachments/assets/f1537d49-7aac-4344-ba6a-77a01339e63f)
 > 

@@ -14,9 +14,11 @@ HighLite is packaged as an Electron application and provides [Linux](#Linux), [M
 1. Obtain the .exe file from the [latest release](https://github.com/Highl1te/HighliteDesktop/releases/latest)
 > [!WARNING]
 > In Microsoft Edge, you may recieve a download warning due to HighLite not being commonly downloaded.
+> 
 > ![image](https://github.com/user-attachments/assets/8dd15f93-29c4-42a8-966b-1bd8a83fa66c)
 > 
 > You can typically resolve this by click '...' and selecting 'Keep'
+
 
 > [!WARNING]
 > HighLite is currently un-signed due to the inherent cost of obtaining signing certificates for software. This results in install and download warnings.
@@ -24,6 +26,7 @@ HighLite is packaged as an Electron application and provides [Linux](#Linux), [M
 > ![image](https://github.com/user-attachments/assets/90651443-a7ed-42b1-8e60-60af2a54fbf1)
 >
 > You can resolve this by click 'More Info' and pressing 'Run anyway'
+> 
 > ![image](https://github.com/user-attachments/assets/f1537d49-7aac-4344-ba6a-77a01339e63f)
 > 
 
@@ -36,7 +39,8 @@ HighLite is packaged as an Electron application and provides [Linux](#Linux), [M
 ## MacOS
 > [!CAUTION]
 > MacOS builds go largely untested so they may be more prone to buggy behavior.
-> 
+
+1. Instructions Pending
 
 
 

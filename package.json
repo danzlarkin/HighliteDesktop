@@ -65,7 +65,7 @@
     }
   },
   "devDependencies": {
-    "electron": "36.3.1",
+    "electron": "^36.3.1",
     "electron-builder": "^26.0.12"
   },
   "dependencies": {
@@ -73,5 +73,5 @@
     "electron-squirrel-startup": "^1.0.1",
     "electron-updater": "^6.6.2"
   },
-  "packageManager": "yarn@4.6.0"
+  "packageManager": "yarn@4.9.1"
 }

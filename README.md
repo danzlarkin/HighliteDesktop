@@ -23,6 +23,7 @@ HighLite is packaged as an Electron application and provides [Linux](#Linux), [M
 > [!WARNING]
 > HighLite is currently un-signed due to the inherent cost of obtaining signing certificates for software. This results in install and download warnings.
 > If we recieve enough players (or complaints!) we will invest in obtaining certificates.
+> 
 > ![image](https://github.com/user-attachments/assets/90651443-a7ed-42b1-8e60-60af2a54fbf1)
 >
 > You can resolve this by click 'More Info' and pressing 'Run anyway'

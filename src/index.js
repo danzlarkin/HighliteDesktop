@@ -103,7 +103,9 @@ async function createUpdateWindow() {
 
     updateWindow.loadFile(path.join(__dirname, 'update.html'));
     // Open dev tools if not packaged
-    updateWindow.webContents.openDevTools();
+    if (!app.isPackaged)
+      updateWindow.webContents.openDevTools();
+    }
 
     windows.add(updateWindow);
 

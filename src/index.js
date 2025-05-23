@@ -143,6 +143,13 @@ async function createUpdateWindow() {
         updateWindow.webContents.send('update-available', updateInfo);
     });
 
+    autoUpdater.on('update-not-available', async () => {
+        log.info('Update not available');
+        await createWindow();
+        updateWindow.close();
+        windows.delete(updateWindow);
+    });
+
     ipcMain.once('install-update', async () => {
         autoUpdater.quitAndInstall();
     });

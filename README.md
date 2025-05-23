@@ -1,5 +1,6 @@
 <p><img src="https://github.com/user-attachments/assets/da5bb809-3949-4854-99e4-1619022444e7" width="128"/></p>
 <p>
+  <img alt="JoinDiscord" src="https://img.shields.io/badge/Discord-Join_Us-purple?style=flat&logo=Discord&label=Discord&link=https%3A%2F%2Fdiscord.gg%2FSszbKF5dtm"/>
   <img alt="GitHub License" src="https://img.shields.io/github/license/Highl1te/HighliteDesktop">
   <img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/Highl1te/HighliteDesktop/main.yml"> 
 </p>

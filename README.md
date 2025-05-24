@@ -3,6 +3,7 @@
   <a href="https://discord.gg/SszbKF5dtm"><img alt="JoinDiscord" src="https://img.shields.io/badge/Discord-Join_Us-purple?style=flat&logo=Discord&label=Discord"/></a>
   <img alt="GitHub License" src="https://img.shields.io/github/license/Highl1te/HighliteDesktop">
   <img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/Highl1te/HighliteDesktop/main.yml"> 
+  <img alt="Downloads" src="https://img.shields.io/github/downloads/Highl1te/HighliteDesktop/latest/total?label=Downloads&color=blue">
 </p>
 
 # HighLite

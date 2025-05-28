@@ -7,7 +7,7 @@
 </p>
 
 # HighLite
-HighLite is an open-source game client for High Spell and has received permission to operate from the game developer.
+HighLite is an open-source game client for High Spell and has received permission to operate from the game developer (Dew).
 
 # Installing HighLite
 HighLite is packaged as an Electron application and provides [Linux](#Linux), [MacOS](#MacOS), and [Windows](#Windows) support.

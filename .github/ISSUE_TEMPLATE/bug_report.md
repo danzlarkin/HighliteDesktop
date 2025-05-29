@@ -1,61 +1,38 @@
-name: Bug Report
-description: Report a bug for a core plugin, the desktop client, or the website!
-title: 'Bug Report: '
-labels:
-  - bug
-body:
-  - type: dropdown
-    id: category
-    attributes:
-      label: Is this a client, plugin, or website bug?
-      description: Please select the "product" that you are experiencing the bug on!
-      options:
-        - Client
-        - Plugin
-        - Website
-    validations:
-      required: true
-  - type: checkboxes
-    id: verified-nondupe
-    attributes:
-      label: I verified this is not a duplicate report
-      description: >-
-        We ask that you check to veirfy this is not a duplicate bug here:
-        https://github.com/Highl1te/HighliteDesktop/issues
-      options:
-        - label: 'Yes'
-          required: true
-  - type: checkboxes
-    id: verify-highlite-bug
-    attributes:
-      label: I verified this bug only occurs with HighLite
-      description: >-
-        If it is a HighLite client bug we ask that you check to make sure it is
-        actually HighLite and not just a High Spell web client issue.
-      options:
-        - label: 'Yes'
-          required: false
-        - label: Not Applicable
-          required: false
-  - type: textarea
-    id: reproduction
-    attributes:
-      label: Reproduction
-      description: >-
-        Please describe how this bug can be reproduced. A step-by-step text
-        description, a video, or screenshots are all appreciated.
-  - type: textarea
-    id: description
-    attributes:
-      label: Bug Description
-      description: >-
-        Please provide details of what happens when the bug occurs, aka the
-        problematic behavior. Pictures, textual descriptions, etc. are all
-        appreciated.
-    validations:
-      required: true
-  - type: markdown
-    attributes:
-      value: >-
-        This template was generated with [Issue Forms
-        Creator](https://issue-forms-creator.netlify.app)
+---
+name: Bug report
+about: Create a report to help us improve
+title: ''
+labels: ''
+assignees: ''
+
+---
+
+**Describe the bug**
+A clear and concise description of what the bug is.
+
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
+4. See error
+
+**Expected behavior**
+A clear and concise description of what you expected to happen.
+
+**Screenshots**
+If applicable, add screenshots to help explain your problem.
+
+**Desktop (please complete the following information):**
+ - OS: [e.g. iOS]
+ - Browser [e.g. chrome, safari]
+ - Version [e.g. 22]
+
+**Smartphone (please complete the following information):**
+ - Device: [e.g. iPhone6]
+ - OS: [e.g. iOS8.1]
+ - Browser [e.g. stock browser, safari]
+ - Version [e.g. 22]
+
+**Additional context**
+Add any other context about the problem here.

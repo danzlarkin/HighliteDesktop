@@ -2,7 +2,7 @@ name: Bug Report
 description: Report a bug for a core plugin, the desktop client, or the website!
 title: 'Bug Report: '
 labels:
-  - bug
+  - Bug
 body:
   - type: dropdown
     id: category

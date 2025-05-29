@@ -1,13 +1,9 @@
 const { app, ipcMain, BrowserWindow, shell } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const keytar = require('keytar');
-const fs = require('fs');
 const path = require('path');
 const log = require('electron-log');
-
-// Acquire service name from package.json
-const SERVICE_NAME = require('../package.json').name;
-
+const SERVICE_NAME = 'HighLite';
 log.initialize({ spyRendererConsole: true });
 
 autoUpdater.autoDownload = false;
@@ -45,14 +41,12 @@ async function createWindow() {
             nodeIntegrationInWorker: true,
             contextIsolation: false,
             enablePreferredSizeMode: true,
-            webSecurity : false, // Disable web security for local file access
         },
         minHeight: 500,
         minWidth: 500,
         icon: path.join(__dirname, 'static/icons/icon.png'),
         titleBarStyle: 'hidden',
         show: false,
-
     });
 
     mainWindow.setMenu(null);
@@ -73,7 +67,6 @@ async function createWindow() {
         }
     });
 
-        
     mainWindow.on('closed', () => {
         windows.delete(mainWindow);
     });
@@ -94,7 +87,6 @@ async function createWindow() {
     mainWindow.webContents.on('zoom-changed', (event, zoomDirection) => {
         if (zoomDirection === 'in') {
             // Increase zoom factor by 0.1 and dispatch a resize event to adjust the layout
-
             mainWindow.webContents.zoomLevel += 0.1;
         }
         else if (zoomDirection === 'out') {
@@ -122,7 +114,6 @@ async function createWindow() {
             return [];
         }
     });
-
 
     ipcMain.handle("get-saved-password", async (event, username) => {
         try {
@@ -163,9 +154,7 @@ async function createWindow() {
             mainWindow.close();
         }
     });
-    ipcMain.send('is-darwin', process.platform === 'darwin');
-
-
+    mainWindow.webContents.send('is-darwin', process.platform === 'darwin');
 
     windows.add(mainWindow);
 }

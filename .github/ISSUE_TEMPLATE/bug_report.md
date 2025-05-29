@@ -1,12 +1,3 @@
----
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
-assignees: ''
-
----
-
 name: Bug Report
 description: Report a bug for a core plugin, the desktop client, or the website!
 title: 'Bug Report: '

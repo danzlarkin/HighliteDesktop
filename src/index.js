@@ -40,7 +40,6 @@ function initializeTitle(mainWindow) {
 
 async function createWindow() {
     const mainWindow = new BrowserWindow({
-        titleBarStyle: 'hidden',
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
@@ -51,13 +50,7 @@ async function createWindow() {
         minHeight: 500,
         minWidth: 500,
         icon: path.join(__dirname, 'static/icons/icon.png'),
-        ...(process.platform !== 'darwin' ? {
-            titleBarOverlay: {
-                color: '#141414',
-                symbolColor: '#eee',
-                height: 25
-            },
-        } : {}),
+        titleBarStyle: 'hidden',
         show: false,
 
     });
@@ -65,6 +58,8 @@ async function createWindow() {
     mainWindow.setMenu(null);
 
     mainWindow.loadFile(path.join(__dirname, 'index.html'));
+
+    // Open Links in External Browser
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
         shell.openExternal(url);
         return { action: 'deny' };
@@ -93,14 +88,18 @@ async function createWindow() {
     ipcMain.on('show-dev-tools', () => {
         mainWindow.webContents.openDevTools();
     });
-
+    
+    mainWindow.webContents.zoomLevel = 0;
     // Enable Zooming Page In and Out
     mainWindow.webContents.on('zoom-changed', (event, zoomDirection) => {
         if (zoomDirection === 'in') {
-            mainWindow.webContents.send("zoom-in");
+            // Increase zoom factor by 0.1 and dispatch a resize event to adjust the layout
+
+            mainWindow.webContents.zoomLevel += 0.1;
         }
         else if (zoomDirection === 'out') {
-            mainWindow.webContents.send("zoom-out");
+            // Decrease zoom factor by 0.1 and dispatch a resize event to adjust the layout
+            mainWindow.webContents.zoomLevel -= 0.1;
         }
     });
 
@@ -143,6 +142,29 @@ async function createWindow() {
             log.error(`Failed to delete credential for ${username}:`, err);
         }
     });
+
+    ipcMain.on('minimize-window', () => {
+        if (mainWindow.isMinimizable()) {
+            mainWindow.minimize();
+        }
+    });
+
+    ipcMain.on('toggle-maximize-window', () => {
+        if (mainWindow.isMaximizable()) {
+            if (mainWindow.isMaximized()) {
+                mainWindow.unmaximize();
+            } else {
+                mainWindow.maximize();
+            }
+        }
+    });
+    ipcMain.on('close-window', () => {
+        if (mainWindow.isClosable()) {
+            mainWindow.close();
+        }
+    });
+    ipcMain.send('is-darwin', process.platform === 'darwin');
+
 
 
     windows.add(mainWindow);
@@ -219,6 +241,12 @@ async function createUpdateWindow() {
         await createWindow();
         updateWindow.close();
         windows.delete(updateWindow);
+    });
+
+    // Open Links in External Browser
+    updateWindow.webContents.setWindowOpenHandler(({ url }) => {
+        shell.openExternal(url);
+        return { action: 'deny' };
     });
 }
 

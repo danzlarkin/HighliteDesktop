@@ -4,9 +4,13 @@ body {
 }
 
 .highlite_titlebar {
-    height: 25px;
+    height: 28px;
+    min-height: 28px;
+    max-height: 28px;
     background: #141414;
-    width: 100%;
+    width: 100vw;
+    min-width: 100vw;
+    max-width: 100vw;
     font-size: 14px;
     color: white;
     display: flex;
@@ -44,8 +48,9 @@ body {
     height: -webkit-fill-available;
     background: #141414;
     color: white;
-    width: auto;
+    width: 30px;
     min-width: 30px;
+    max-width: 30px;
     z-index: 999;
     flex-wrap: wrap;
     border-left: 1px solid #353535;
@@ -58,7 +63,9 @@ body {
     z-index: 999;
     position: relative;
     display: none;
-    width: 250px;
+    max-width: 220px;
+    width: 220px;
+    min-width: 220px;
     border-right: 1px solid black;
     border-left: 1px solid #353535;
 }
@@ -99,6 +106,8 @@ body {
     font-family: 'Inter';
     font-size: 14px;
     border-top: 1px solid black;
+    position: relative;
+    height: 100%;
 }
 
 .video-background {

@@ -1,8 +1,12 @@
-const { app, BrowserWindow, shell } = require('electron');
-const { ipcMain } = require('electron');
+const { app, ipcMain, BrowserWindow, shell } = require('electron');
 const { autoUpdater } = require('electron-updater');
-const log = require('electron-log');
+const keytar = require('keytar');
+const fs = require('fs');
 const path = require('path');
+const log = require('electron-log');
+
+// Acquire service name from package.json
+const SERVICE_NAME = require('../package.json').name;
 
 log.initialize({ spyRendererConsole: true });
 
@@ -41,7 +45,8 @@ async function createWindow() {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
             contextIsolation: false,
-            enablePreferredSizeMode: true
+            enablePreferredSizeMode: true,
+            webSecurity : false, // Disable web security for local file access
         },
         minHeight: 500,
         minWidth: 500,
@@ -54,6 +59,7 @@ async function createWindow() {
             },
         } : {}),
         show: false,
+
     });
 
     mainWindow.setMenu(null);
@@ -84,9 +90,60 @@ async function createWindow() {
         return Promise.resolve();
     });
 
-    autoUpdater.on('download-progress', (progressObj) => {
-        mainWindow.webContents.send('download-progress', progressObj.percent);
+    ipcMain.on('show-dev-tools', () => {
+        mainWindow.webContents.openDevTools();
     });
+
+    // Enable Zooming Page In and Out
+    mainWindow.webContents.on('zoom-changed', (event, zoomDirection) => {
+        if (zoomDirection === 'in') {
+            mainWindow.webContents.send("zoom-in");
+        }
+        else if (zoomDirection === 'out') {
+            mainWindow.webContents.send("zoom-out");
+        }
+    });
+
+    // Password Handling
+    ipcMain.handle("save-username-password", async (event, username, password) => {
+        try {
+            await keytar.setPassword(SERVICE_NAME, username, password);
+            log.info(`Saved credential for ${username}`);
+        } catch (err) {
+            log.error('Failed to save credential:', err);
+        }
+    });
+
+    ipcMain.handle("get-saved-usernames", async () => {
+        try {
+            const credentials = await keytar.findCredentials(SERVICE_NAME);
+            return credentials.map(c => c.account);
+        } catch (err) {
+            log.error('Failed to list usernames:', err);
+            return [];
+        }
+    });
+
+
+    ipcMain.handle("get-saved-password", async (event, username) => {
+        try {
+            const password = await keytar.getPassword(SERVICE_NAME, username);
+            return password || '';
+        } catch (err) {
+            log.error(`Failed to get password for ${username}:`, err);
+            return '';
+        }
+    });
+
+    ipcMain.handle("delete-username-password", async (event, username) => {
+        try {
+            await keytar.deletePassword(SERVICE_NAME, username);
+            log.info(`Deleted credential for ${username}`);
+        } catch (err) {
+            log.error(`Failed to delete credential for ${username}:`, err);
+        }
+    });
+
 
     windows.add(mainWindow);
 }
@@ -177,7 +234,7 @@ app.whenReady().then(() => {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
         if (windows.size === 0) {
-            createWindow();
+            createUpdateWindow();
         }
     });
 });

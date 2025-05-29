@@ -1,5 +1,4 @@
 /* Modifications to CSS set by the game client's CSS file */
-
 #main {
     align-items: unset !important;
     justify-content: unset !important;
@@ -33,4 +32,8 @@ body {
 #game-container__game-canvas {
     width: -webkit-fill-available !important;
     min-width: unset !important;
+}
+
+::-webkit-scrollbar {
+    display: none !important;
 }

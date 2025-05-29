@@ -127,7 +127,6 @@ async function generatePage() {
     /* Find DOM elements with the attribute to= */
     const toElements = document.querySelectorAll("[to]");
     toElements.forEach(element => {
-        console.warn(element);
         const to = element.getAttribute("to");
         const targetElement = document.querySelector(to);
 
@@ -179,6 +178,11 @@ async function generatePage() {
     highliteCoreScript.textContent = await obtainHighliteCore();
     document.body.append(highliteCoreScript);
 
+    // Page Setup Completed, Add User Helper Script
+    import("../helpers/userHelper.js").then((module) => {
+        module.createUserHelper();
+    });
+
     ipcRenderer.send("ui-ready")
 
     // Fire a new DOMContentLoaded event
@@ -186,6 +190,9 @@ async function generatePage() {
         bubbles: true,
         cancelable: true
     }));
+
+
+
 }
 
 

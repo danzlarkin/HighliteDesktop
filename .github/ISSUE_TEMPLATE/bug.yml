@@ -54,5 +54,5 @@ body:
       description: >-
         Please describe how this bug can be reproduced. A step-by-step text
         description, a video, or screenshots are all appreciated.
-      validations:
-        required: true
+    validations:
+      required: true

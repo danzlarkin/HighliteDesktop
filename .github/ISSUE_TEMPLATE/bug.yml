@@ -37,14 +37,7 @@ body:
           required: false
         - label: Not Applicable
           required: false
-  - type: textarea
-    id: reproduction
-    attributes:
-      label: Reproduction
-      description: >-
-        Please describe how this bug can be reproduced. A step-by-step text
-        description, a video, or screenshots are all appreciated.
-  - type: textarea
+    - type: textarea
     id: description
     attributes:
       label: Bug Description
@@ -54,3 +47,12 @@ body:
         appreciated.
     validations:
       required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: >-
+        Please describe how this bug can be reproduced. A step-by-step text
+        description, a video, or screenshots are all appreciated.
+      validations:
+        required: true

@@ -1,5 +1,6 @@
 const { app, ipcMain, BrowserWindow, shell } = require('electron');
 const { autoUpdater } = require('electron-updater');
+const { format } = require('url');
 const keytar = require('keytar');
 const path = require('path');
 const log = require('electron-log');
@@ -120,7 +121,14 @@ async function createWindow() {
 
     mainWindow.setMenu(null);
     windows.push(mainWindow);
-    mainWindow.loadURL(path.join('file://', __dirname, `index.html?windowID=${windows.length - 1}`));
+
+    const windowLoadPath = format({
+        protocol: 'file',
+        pathname: path.join(__dirname, 'index.html'),
+        query: { windowID: windows.length - 1 },
+        slashes: true,
+    })
+    mainWindow.loadURL(windowLoadPath);
 
     // Open Links in External Browser
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {

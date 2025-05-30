@@ -153,8 +153,7 @@ async function createWindow() {
         windows = windows.filter(win => win !== mainWindow);
     });
 
-    mainWindow.on('ready-to-show', (event) => {
-        console.log(event);
+    mainWindow.on('ready-to-show', () => {
         // Always start with zoom reset to 0.0
         mainWindow.webContents.setZoomLevel(0);
     });

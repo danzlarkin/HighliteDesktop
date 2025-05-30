@@ -18,21 +18,88 @@ app.commandLine.appendSwitch('disable-backgrounding-occluded-windows');
 // Log the app version
 log.info('App version:', app.getVersion());
 
-let windows = new Set();
-
-function initializeTitle(mainWindow) {
-    const args = process.argv;
-    const profileArg = args.find(arg => arg.startsWith('--profile='));
-
-    let title = `HighLite`;
-
-    if (profileArg) {
-        let profileName = profileArg.split('=')[1];
-        title = `${profileName} - HighLite`;
+// Password Handling
+ipcMain.handle("save-username-password", async (event, username, password) => {
+    try {
+        await keytar.setPassword(SERVICE_NAME, username, password);
+        log.info(`Saved credential for ${username}`);
+    } catch (err) {
+        log.error('Failed to save credential:', err);
     }
+});
 
-    mainWindow.webContents.send('set-title', { title });
-}
+ipcMain.handle("get-saved-usernames", async () => {
+    try {
+        const credentials = await keytar.findCredentials(SERVICE_NAME);
+        return credentials.map(c => c.account);
+    } catch (err) {
+        log.error('Failed to list usernames:', err);
+        return [];
+    }
+});
+
+ipcMain.handle("get-saved-password", async (event, username) => {
+    try {
+        const password = await keytar.getPassword(SERVICE_NAME, username);
+        return password || '';
+    } catch (err) {
+        log.error(`Failed to get password for ${username}:`, err);
+        return '';
+    }
+});
+
+ipcMain.handle("delete-username-password", async (event, username) => {
+    try {
+        await keytar.deletePassword(SERVICE_NAME, username);
+        log.info(`Deleted credential for ${username}`);
+    } catch (err) {
+        log.error(`Failed to delete credential for ${username}:`, err);
+    }
+});
+
+// Window Controls Handling
+ipcMain.on('minimize-window', (event) => {
+    // Get the BrowserWindow instance from the event
+    const window = BrowserWindow.fromWebContents(event.sender)
+    if (window && window.isMinimizable()) {
+        window.minimize();
+    }
+});
+
+ipcMain.on('toggle-maximize-window', (event) => {
+    // Get the BrowserWindow instance from the event
+    const window = BrowserWindow.fromWebContents(event.sender);
+    if (window) {
+        if (window.isMaximized()) {
+            window.unmaximize();
+        } else {
+            window.maximize();
+        }
+    }
+});
+
+ipcMain.on('close-window', (event) => {
+    // Get the BrowserWindow instance from the event
+    const window = BrowserWindow.fromWebContents(event.sender);
+    if (window && !window.isDestroyed()) {
+        window.close();
+    }
+});
+
+// UI Ready Handling
+ipcMain.on('ui-ready', (event) => {
+    const window = BrowserWindow.fromWebContents(event.sender);
+    window.show();
+});
+
+// Dev Tools Handling
+ipcMain.on('show-dev-tools', (event) => {
+    // Get the BrowserWindow instance from the event
+    const window = BrowserWindow.fromWebContents(event.sender);
+    if (window) {
+        window.webContents.toggleDevTools();
+    }
+});
 
 async function createWindow() {
     const mainWindow = new BrowserWindow({
@@ -66,21 +133,6 @@ async function createWindow() {
             mainWindow.webContents.toggleDevTools();
         }
     });
-
-    mainWindow.on('closed', () => {
-        windows.delete(mainWindow);
-    });
-
-    // Listen for "ui-ready" signal from renderer
-    ipcMain.once('ui-ready', () => {
-        initializeTitle(mainWindow);
-        mainWindow.show();
-        return Promise.resolve();
-    });
-
-    ipcMain.on('show-dev-tools', () => {
-        mainWindow.webContents.openDevTools();
-    });
     
     mainWindow.webContents.zoomLevel = 0;
     // Enable Zooming Page In and Out
@@ -95,68 +147,7 @@ async function createWindow() {
         }
     });
 
-    // Password Handling
-    ipcMain.handle("save-username-password", async (event, username, password) => {
-        try {
-            await keytar.setPassword(SERVICE_NAME, username, password);
-            log.info(`Saved credential for ${username}`);
-        } catch (err) {
-            log.error('Failed to save credential:', err);
-        }
-    });
-
-    ipcMain.handle("get-saved-usernames", async () => {
-        try {
-            const credentials = await keytar.findCredentials(SERVICE_NAME);
-            return credentials.map(c => c.account);
-        } catch (err) {
-            log.error('Failed to list usernames:', err);
-            return [];
-        }
-    });
-
-    ipcMain.handle("get-saved-password", async (event, username) => {
-        try {
-            const password = await keytar.getPassword(SERVICE_NAME, username);
-            return password || '';
-        } catch (err) {
-            log.error(`Failed to get password for ${username}:`, err);
-            return '';
-        }
-    });
-
-    ipcMain.handle("delete-username-password", async (event, username) => {
-        try {
-            await keytar.deletePassword(SERVICE_NAME, username);
-            log.info(`Deleted credential for ${username}`);
-        } catch (err) {
-            log.error(`Failed to delete credential for ${username}:`, err);
-        }
-    });
-
-    ipcMain.on('minimize-window', () => {
-        if (mainWindow.isMinimizable()) {
-            mainWindow.minimize();
-        }
-    });
-
-    ipcMain.on('toggle-maximize-window', () => {
-        if (mainWindow.isMaximizable()) {
-            if (mainWindow.isMaximized()) {
-                mainWindow.unmaximize();
-            } else {
-                mainWindow.maximize();
-            }
-        }
-    });
-    ipcMain.on('close-window', () => {
-        if (mainWindow.isClosable()) {
-            mainWindow.close();
-        }
-    });
     mainWindow.webContents.send('is-darwin', process.platform === 'darwin');
-
-    windows.add(mainWindow);
 }
 
 async function createUpdateWindow() {
@@ -180,8 +171,6 @@ async function createUpdateWindow() {
       updateWindow.webContents.openDevTools();
     }
 
-    windows.add(updateWindow);
-
     updateWindow.on('ready-to-show', async () => {
         if (!app.isPackaged) {
           // Fire delay-update event to delay the update
@@ -190,7 +179,6 @@ async function createUpdateWindow() {
 
           await createWindow();
           updateWindow.close();
-          windows.delete(updateWindow);
 
         } else {
            autoUpdater.checkForUpdates();
@@ -215,7 +203,6 @@ async function createUpdateWindow() {
         log.info('Update not available');
         await createWindow();
         updateWindow.close();
-        windows.delete(updateWindow);
     });
 
     ipcMain.once('install-update', async () => {
@@ -229,7 +216,6 @@ async function createUpdateWindow() {
     ipcMain.once('delay-update', async () => {
         await createWindow();
         updateWindow.close();
-        windows.delete(updateWindow);
     });
 
     // Open Links in External Browser
@@ -250,8 +236,8 @@ app.whenReady().then(() => {
     app.on('activate', () => {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
-        if (windows.size === 0) {
-            createUpdateWindow();
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow();
         }
     });
 });

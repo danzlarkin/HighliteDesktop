@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <script src="https://kit.fontawesome.com/c57f34e341.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div to="#body-container" before="main" class="highlite_titlebar">
+            <div style="display: flex; margin-left: 5px; align-items: center;">
+                <img id="logoImg" src="../../../static/icons/icon.png" alt="HighLite Logo"/>
+                <span id="logoText">HighLite</span>
+            </div>
+
+            <div id="iconbar" style="display: flex;left: calc(env(titlebar-area-width, 100%));position: absolute;height: -webkit-fill-available;align-items: anchor-center;">
+                <a href="https://discord.gg/SszbKF5dtm" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-brands fa-discord"></i>
+                </a>
+                <a style="display: none" id="warningIndicator" href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
+
+                <!-- Add Traditional Window Controls-->
+                <div id="window-controls">
+                    <a id="minimizeBtn" class="window-control" title="Minimize"><i class="fa-solid fa-minus"></i></a>
+                    <a id="maximizeBtn" class="window-control" title="Maximize"><i class="fa fa-window-maximize"></i></a>
+                    <a id="closeBtn" class="window-control" title="Close"><i class="fa-solid fa-xmark"></i></a>
+                </div>
+        </div>
+        <video width="100%" height="100%" autoplay muted loop class="video-background">
+            <source src="../../../static/media/login_screen.mp4" type="video/mp4">
+        </video>
+        <script type="module" src="client.ts"></script>
+    </body>
+
+    <style>
+        #iconbar .fa-brands {
+            margin: 0 5px;
+        }
+
+        #iconbar .fa {
+            margin: 0 5px;
+        }
+
+        #iconbar #window-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-left: 20px;
+            width: 65px;
+            margin-right: 0px;
+        }
+    </style>
+</html>

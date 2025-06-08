@@ -1,7 +1,7 @@
 {
-  "name": "HighliteDesktop",
+  "name": "highlite",
   "productName": "HighLite",
-  "version": "1.1.4",
+  "version": "1.2.1",
   "description": "A RuneLite-esque Client for the game High Spell",
   "homepage": "https://github.com/Highl1te/HighliteDesktop#readme",
   "bugs": {
@@ -11,14 +11,21 @@
     "type": "git",
     "url": "git+https://github.com/Highl1te/HighliteDesktop.git"
   },
-  "license": "GPL-3.0-or-later",
+  "license": "GPL-3.0-only",
   "author": "Highlite Team",
-  "main": "src/index.js",
+  "main": "./out/main/index.js",
   "scripts": {
-    "app:dir": "electron-builder --dir",
-    "app:dist": "electron-builder",
-    "start": "electron .",
-    "start-profile-test": "electron . --profile=Test"
+    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
+    "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
+    "typecheck": "npm run typecheck:node && npm run typecheck:web",
+    "start": "electron-vite preview",
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "postinstall": "electron-builder install-app-deps",
+    "build:unpack": "npm run build && electron-builder --dir",
+    "build:win": "npm run build && electron-builder --win",
+    "build:mac": "npm run build && electron-builder --mac",
+    "build:linux": "npm run build && electron-builder --linux"
   },
   "build": {
     "appId": "com.highlite.desktop",
@@ -36,7 +43,8 @@
         {
           "target": "dmg",
           "arch": [
-            "x64"
+            "x64",
+            "arm64"
           ]
         }
       ]
@@ -64,15 +72,26 @@
       "icon": "build/icon.png"
     }
   },
-  "devDependencies": {
-    "electron": "^36.3.1",
-    "electron-builder": "^26.0.12"
-  },
   "dependencies": {
+    "@babylonjs/core": "^8.11.0",
+    "@electron-toolkit/preload": "^3.0.2",
+    "@electron-toolkit/utils": "^4.0.0",
     "electron-log": "^5.4.0",
-    "electron-squirrel-startup": "^1.0.1",
-    "electron-updater": "^6.6.2",
+    "electron-updater": "^6.3.9",
+    "idb": "^8.0.3",
     "keytar": "^7.9.0"
   },
-  "packageManager": "yarn@4.9.1"
+  "devDependencies": {
+    "@electron-toolkit/eslint-config-prettier": "^3.0.0",
+    "@electron-toolkit/eslint-config-ts": "^3.0.0",
+    "@electron-toolkit/tsconfig": "^1.0.1",
+    "@types/node": "^22.14.1",
+    "electron": "^35.1.5",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^3.1.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.2.6",
+    "vite-plugin-electron": "^0.29.0"
+  },
+  "packageManager": "yarn@4.9.2"
 }

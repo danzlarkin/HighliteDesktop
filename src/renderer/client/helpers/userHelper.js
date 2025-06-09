@@ -8,6 +8,8 @@
     The script also injects a new button that must be clicked to save the new username and password.
 */
 
+import { setTitle } from "../helpers/titlebarHelpers.js";
+
 let doOncePerLoginScreen = true;
 export function createUserHelper() {
     // Setup mutation observer on document to wait for #login-menu-username to be available
@@ -163,19 +165,21 @@ function setupUserHelper() {
                 deleteCredentialsButton.style.display = "none"; // Hide the delete button when entering a new username
             }
 
+            setTitle("HighLite"); // Update the title to indicate "Other" user
+
         } else {
             // Otherwise, hide the original input and fill it with the selected username
             usernameInput.style.display = "none";
             usernameInput.value = this.value;
 
-
+            setTitle(`HighLite - ${this.value}`); // Update the title to indicate "Other" user
             // IPC Request to get saved passwords for the selected username
             window.electron.ipcRenderer.invoke("get-saved-password", this.value).then((savedPassword) => {
                 const passwordInput = document.querySelector("#login-menu-password");
                 passwordInput.value = savedPassword || ""; // Fill with saved password or empty if not found
             })
 
-                        // See if "Delete Selected Credential" button exists
+            // See if "Delete Selected Credential" button exists
             // Query all elements with the id "login-menu-home-button"
             const potentialButtons = document.querySelectorAll("#login-menu-home-button");
             const deleteCredentialsButton = Array.from(potentialButtons).find(button => button.textContent.trim() === "Delete Selected Credential");
@@ -221,6 +225,12 @@ function setupUserHelper() {
                     // Otherwise, use the selected username from the dropdown
                     window.electron.ipcRenderer.invoke("save-username-password", selectedUsername, password);
                 }
+            }
+            
+            if (selectedUsername === "other" && usernameInput.value !== "") {
+                setTitle(`HighLite - ${usernameInput.value}`);
+            } else {
+                setTitle(`HighLite - ${selectedUsername}`);
             }
 
             // Look for 'id' hs-screen-mask to exist trigger once

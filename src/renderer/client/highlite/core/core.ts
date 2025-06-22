@@ -60,6 +60,7 @@ export class Highlite {
         this.hookManager.registerClass("PF", "PF"); // Unkown Name
         this.hookManager.registerClass("NW", "PrivateChatMessageList");
         this.hookManager.registerClass("uW", "LoginScreen");
+        this.hookManager.registerClass('HR', 'HR');
 
         // Function Hook-ins
         this.hookManager.registerClassOverrideHook("LoginScreen", "_handleRegisterButtonClicked", this.loginHooks);

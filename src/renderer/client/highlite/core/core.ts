@@ -91,6 +91,7 @@ export class Highlite {
         document.highlite.gameLookups["InventoryActions"] = document.client.get("QA");
         document.highlite.gameLookups["Skills"] = document.client.get("bA");
         document.highlite.gameLookups["EquipmentTypes"] = document.client.get("oP");
+        document.highlite.gameLookups["NpcDefs"] = document.client.get("uB");
     }
 
     async loginHooks(fnName: string, ...args: any[]) {

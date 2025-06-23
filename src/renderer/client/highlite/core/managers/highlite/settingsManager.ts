@@ -71,7 +71,7 @@ export class SettingsManager {
         this.mainSettingsView.id = 'highlite-settings-content-row-holder'
         this.mainSettingsView.style.width = '100%';
         this.mainSettingsView.style.height = '100%';
-        this.mainSettingsView.style.overflowY = 'hidden';
+        this.mainSettingsView.style.overflowY = 'auto';
         this.mainSettingsView.style.overflowX = 'hidden';
         this.mainSettingsView.style.display = 'flex';
         this.mainSettingsView.style.flexDirection = 'column';
@@ -150,7 +150,7 @@ export class SettingsManager {
         this.pluginSettingsView.id = 'highlite-settings-content-row-holder'
         this.pluginSettingsView.style.width = '100%';
         this.pluginSettingsView.style.height = '100%';
-        this.pluginSettingsView.style.overflowY = 'hidden';
+        this.pluginSettingsView.style.overflowY = 'auto';
         this.pluginSettingsView.style.overflowX = 'hidden';
         this.pluginSettingsView.style.display = 'flex';
         this.pluginSettingsView.style.flexDirection = 'column';

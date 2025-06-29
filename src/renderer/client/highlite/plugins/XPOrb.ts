@@ -1,6 +1,6 @@
 import { Plugin } from "../core/interfaces/highlite/plugin/plugin.class";
 import { SettingsTypes } from "../core/interfaces/highlite/plugin/pluginSettings.interface";
-import { getSkillName } from "../core/utilities/LookupUtils";
+import { getSkillName } from "../core/utilities/lookupUtils";
 
 interface SkillXPData {
     skillId: number;

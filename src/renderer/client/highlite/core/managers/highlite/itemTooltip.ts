@@ -1,4 +1,4 @@
-import { getEquipmentTypeName, getSkillName } from "../../utilities/LookupUtils";
+import { getEquipmentTypeName, getSkillName } from "../../utilities/lookupUtils";
 
 export class ItemTooltip {
   private element: HTMLDivElement;

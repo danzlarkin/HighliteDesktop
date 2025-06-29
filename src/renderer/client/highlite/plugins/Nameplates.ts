@@ -604,7 +604,7 @@ export class Nameplates extends Plugin {
         
         const maxLineLength = Math.max(...options.lines.map(line => line.text.length));
         const textureWidth = Math.max(1024, maxLineLength * scaledFontSize * 0.8) * scaleFactor;
-        const lineHeight = scaledFontSize + (10 * scaleFactor);
+        const lineHeight = scaledFontSize + (5 * scaleFactor);
         const textureHeight = (options.lines.length * lineHeight + 80) * scaleFactor;
         
         const dynamicTexture = new DynamicTexture("textTexture", { width: textureWidth, height: textureHeight }, options.scene, false, DynamicTexture.TRILINEAR_SAMPLINGMODE);
@@ -621,7 +621,8 @@ export class Nameplates extends Plugin {
         context.textBaseline = "middle";
         
         context.strokeStyle = "rgba(0, 0, 0, 0.9)";
-        context.lineWidth = 4 * scaleFactor;
+        // Scale stroke width proportionally with font size (approximately 6-8% of font size)
+        context.lineWidth = Math.max(2, scaledFontSize * 0.10);
         context.lineJoin = "round";
         context.lineCap = "round";
         context.miterLimit = 2;

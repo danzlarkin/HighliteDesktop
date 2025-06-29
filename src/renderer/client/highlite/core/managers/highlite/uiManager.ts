@@ -1,3 +1,5 @@
+import { ItemTooltip } from "./itemTooltip";
+
 export enum UIManagerScope {
   ClientRelative,
   ClientInternal,
@@ -6,13 +8,14 @@ export enum UIManagerScope {
 
 export class UIManager {
   private static instance: UIManager;
+  private itemTooltip: ItemTooltip | null = null;
 
   constructor() {
     if (UIManager.instance) {
       return UIManager.instance;
     }
     UIManager.instance = this;
-    document.highlite.managers.UIManager = this;
+    (document as any).highlite.managers.UIManager = this;
   }
 
   private preventDefault(e: Event) {
@@ -66,5 +69,50 @@ export class UIManager {
         break;
     }
     return element;
+  }
+
+  private ensureItemTooltip() {
+    // Check if tooltip exists AND is still attached to the DOM
+    if (this.itemTooltip && this.itemTooltip.isAttached()) {
+      return;
+    }
+    
+    // Create new tooltip instance
+    const screenMask = document.getElementById('hs-screen-mask');        
+    const container = screenMask || document.body;
+    this.itemTooltip = new ItemTooltip(container);
+  }
+
+  /**
+   * Draw an item tooltip at the specified coordinates
+   * @param itemId - The item ID to display tooltip for
+   * @param x - X coordinate (in pixels)
+   * @param y - Y coordinate (in pixels)
+   * @returns Object with hide() method to close the tooltip
+   */
+  drawItemTooltip(itemId: number, x: number, y: number): { hide: () => void } {
+    this.ensureItemTooltip();
+    
+    if (!this.itemTooltip) {
+      return { hide: () => {} };
+    }
+
+    return this.itemTooltip.show(itemId, x, y);
+  }
+
+  /**
+   * Hide any currently visible item tooltip
+   */
+  hideItemTooltip(): void {
+    if (this.itemTooltip) {
+      this.itemTooltip.hide();
+    }
+  }
+
+  /**
+   * Get the currently displayed item tooltip ID
+   */
+  getCurrentItemTooltipId(): number | null {
+    return this.itemTooltip?.getCurrentItemId() || null;
   }
 }

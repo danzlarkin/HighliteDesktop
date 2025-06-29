@@ -37,17 +37,6 @@ export class Nameplates extends Plugin {
 
     private positionTracker: Map<string, number> = new Map();
 
-    private calculateLevelColor(playerLevel: number, npcLevel: number): string {
-        const diff = Math.max(-10, Math.min(10, playerLevel - npcLevel));
-        const colors = [
-            "#00ff00", "#19ff00", "#32ff00", "#4cff00", "#65ff00",
-            "#7fff00", "#98ff00", "#b2ff00", "#ccff00", "#e5ff00",
-            "#ffff00", "#ffe500", "#ffcc00", "#ffb200", "#ff9800",
-            "#ff7f00", "#ff6500", "#ff4c00", "#ff3200", "#ff1900", "#ff0000"
-        ];
-        return colors[diff + 10] || "#ffffff";
-    }
-
     init(): void {
         this.log("Initializing");
     }
@@ -300,13 +289,7 @@ export class Nameplates extends Plugin {
             lvlSpan.style.textAlign = "center";
             lvlSpan.style.fontSize = `${this.settings.npcNameplateSize!.value}px`;
             lvlSpan.innerText = `Lvl. ${npc._combatLevel}`;
-            
-            if (BW) {
-                lvlSpan.className = BW.getTextColorClassNameForCombatLevelDifference(playerCombatLevel, npc._combatLevel);
-            } else {
-                // Fallback to manual color calculation
-                lvlSpan.style.color = this.calculateLevelColor(playerCombatLevel, npc._combatLevel);
-            }
+            lvlSpan.className = BW.getTextColorClassNameForCombatLevelDifference(playerCombatLevel, npc._combatLevel);
 
             // Add aggression emojis
             if (npc._def._combat._isAggressive && !npc._def._combat._isAlwaysAggro) {

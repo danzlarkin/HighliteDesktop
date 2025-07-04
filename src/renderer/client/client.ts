@@ -18,6 +18,7 @@ import { ChatItemTooltip } from "./highlite/plugins/ChatItemTooltip";
 import { XPOrb } from "./highlite/plugins/XPOrb";
 import { TreasureMapHelper } from "./highlite/plugins/TreasureMapHelper";
 import { FPSLimiter } from "./highlite/plugins/FPSLimiter";
+import { DefinitionsPanel } from "./highlite/plugins/DefinitionsPanel";
 import { MinimapIcons } from "./highlite/plugins/MinimapIcons";
 
 import "../../../static/css/index.css"
@@ -200,6 +201,7 @@ async function generatePage() {
     highlite.pluginManager.registerPlugin(XPOrb);
     highlite.pluginManager.registerPlugin(TreasureMapHelper);
     highlite.pluginManager.registerPlugin(FPSLimiter);
+    highlite.pluginManager.registerPlugin(DefinitionsPanel);
   
     // Start the highlite instance
     highlite.start();

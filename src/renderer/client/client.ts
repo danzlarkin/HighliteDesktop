@@ -49,7 +49,7 @@ const PLUGIN_REGISTRY = [
     { class: TreasureMapHelper, path: './highlite/plugins/TreasureMapHelper' },
     { class: FPSLimiter, path: './highlite/plugins/FPSLimiter' },
     { class: DefinitionsPanel, path: './highlite/plugins/DefinitionsPanel'},
-    { class: MinimapIcons, path: './highlite/plugins/MinimapIcons}
+    { class: MinimapIcons, path: './highlite/plugins/MinimapIcons'}
 ];
 
 async function obtainGameClient() {

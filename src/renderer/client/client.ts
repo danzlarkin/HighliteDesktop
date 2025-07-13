@@ -24,6 +24,7 @@ import { CurrentStatus } from "./highlite/plugins/CurrentStatus";
 import { MinimapIcons } from './highlite/plugins/MinimapIcons';
 import { EmojiChat } from './highlite/plugins/EmojiChat';
 import { setupWorldSelectorObserver } from './helpers/worldSelectHelper';
+import { PacketQueue } from "./highlite/plugins/PacketQueue";
 import { ChatEnhancer } from './highlite/plugins/ChatEnhancer';
 
 import '@static/css/index.css';
@@ -61,6 +62,7 @@ const PLUGIN_REGISTRY = [
     { class: FPSLimiter, path: './highlite/plugins/FPSLimiter' },
     { class: DefinitionsPanel, path: './highlite/plugins/DefinitionsPanel'},
     { class: MinimapIcons, path: './highlite/plugins/MinimapIcons'},
+    { class: PacketQueue, path: './highlite/plugins/PacketQueue'},
     { class: CurrentStatus, path: './highlite/plugins/CurrentStatus' },
     { class: EmojiChat, path: './highlite/plugins/EmojiChat' },
     { class: BankSearch, path: './highlite/plugins/BankSearch' },

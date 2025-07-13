@@ -24,7 +24,7 @@ import { DefinitionsPanel } from './highlite/plugins/DefinitionsPanel';
 import { CurrentStatus } from "./highlite/plugins/CurrentStatus";
 import { MinimapIcons } from './highlite/plugins/MinimapIcons';
 import { EmojiChat } from './highlite/plugins/EmojiChat';
-import { setupWorldSelectorObserver } from "./helpers/worldSelectHelper";
+import { AutoSprint } from './highlite/plugins/AutoSprint';
 import { EntityHighlight } from "./highlite/plugins/EntityHighlight";
 import { BankSearch } from './highlite/plugins/BankSearch';
 import { InventoryTooltips } from './highlite/plugins/InventoryTooltips';
@@ -72,6 +72,7 @@ const PLUGIN_REGISTRY = [
     { class: EmojiChat, path: './highlite/plugins/EmojiChat' },
     { class: EntityHighlight, path: './highlite/plugins/EntityHighlight' },
     { class: BankSearch, path: './highlite/plugins/BankSearch' },
+    { class: AutoSprint, path: './highlite/plugins/AutoSprint' }
     { class: InventoryTooltips, path: './highlite/plugins/InventoryTooltips' },
     { class: ChatEnhancer, path: './highlite/plugins/ChatEnhancer' },
 ];

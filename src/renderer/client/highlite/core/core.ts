@@ -41,7 +41,7 @@ export class Highlite {
 
         // Class Mappings
         this.hookManager.registerClass('Bk', 'EntityManager');
-        this.hookManager.registerClass('YN', 'GroundItemManager');
+        this.hookManager.registerClass('yN', 'GroundItemManager');
         this.hookManager.registerClass('zF', 'MeshManager');
         this.hookManager.registerClass('If', 'WorldMapManager');
         this.hookManager.registerClass('zR', 'AtmosphereManager');
